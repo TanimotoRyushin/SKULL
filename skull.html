@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Layout</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        #container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+        }
+        .coster-img {
+            position: absolute;
+            width: 50px; /* 画像のサイズ */
+            height: auto;
+            transform: translate(-50%, -50%); /* 座標を中心に合わせる */
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+
+    <script>
+        const container = document.getElementById('container');
+        const count = 12; // 配置する個数（ここを任意に変更してください）
+        const radius = 200; // 円の半径
+        const centerX = container.clientWidth / 2;
+        const centerY = container.clientHeight / 2;
+
+        for (let i = 0; i < count; i++) {
+            const img = document.createElement('img');
+            img.src = 'coster.png';
+            img.className = 'coster-img';
+            
+            // 角度を計算 (ラジアン)
+            const angle = (i / count) * 2 * Math.PI;
+
+            // 中心からの座標を計算
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+
+            img.style.left = `${x}px`;
+            img.style.top = `${y}px`;
+
+            container.appendChild(img);
+        }
+    </script>
+</body>
+</html>
