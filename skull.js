@@ -1,7 +1,9 @@
 const container = document.getElementById('container');
     const playerCount = 6; // プレイヤー人数
 const radius = 240; // 円の半径
-const imagePath = './img/coaster.png'; // 画像のパス（ここを確認してください）
+const imagePath = './img/coaster_head.png';
+const headPath = './img/skull.png'; // ドクロ (Head)
+const tailPath = './img/flower.png'; // 花 (Tail)
 
 // ゲーム状態変数
 let players = [];
@@ -122,11 +124,21 @@ function renderBoard() {
         const stackDiv = document.createElement('div');
         stackDiv.className = 'card-stack';
         player.stack.forEach((card, idx) => {
-            const disc = document.createElement('div');
+            const disc = document.createElement('div'); // カードのコンテナ
             disc.className = 'card-disc';
+            
+            // 少しずらして配置して枚数感を出す（オプション）
+            // disc.style.transform = `translate(${idx * 2}px, ${idx * -2}px)`;
+
             if (card.revealed) {
-                disc.style.backgroundColor = card.type === 'skull' ? '#000' : '#e91e63';
-                disc.style.borderColor = card.type === 'skull' ? '#f00' : '#fff';
+                disc.style.backgroundColor = 'transparent';
+                disc.style.border = 'none';
+                const img = document.createElement('img');
+                img.src = card.type === 'skull' ? headPath : tailPath;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.borderRadius = '50%';
+                disc.appendChild(img);
             }
             // めくりフェーズでクリック可能にする
             if (phase === 'reveal' && i !== highestBidderIndex && !card.revealed && idx === player.stack.length - 1) {
@@ -154,13 +166,15 @@ function renderControls() {
         if (player.hand.length > 0) {
             ['flower', 'skull'].forEach(type => {
                 if (player.hand.includes(type)) {
-                    const btn = document.createElement('button');
-                    btn.textContent = type === 'flower' ? '花を置く' : 'ドクロを置く';
-                    btn.onclick = () => {
+                    const imgBtn = document.createElement('img');
+                    imgBtn.src = type === 'flower' ? tailPath : headPath;
+                    imgBtn.className = 'control-img-btn';
+                    imgBtn.title = type === 'flower' ? '花を置く' : 'ドクロを置く';
+                    imgBtn.onclick = () => {
                         player.playCard(type);
                         nextTurn();
                     };
-                    controlsDiv.appendChild(btn);
+                    controlsDiv.appendChild(imgBtn);
                 }
             });
         }
